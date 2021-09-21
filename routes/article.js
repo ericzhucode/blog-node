@@ -167,7 +167,13 @@ exports.getArticleList = (req, res) => {
         ],
       };
     } else {
-      conditions = { state };
+      conditions = {
+        // 管理员介绍文章并不需要出现在前台显示的列表上
+        $and: [
+          { type: { $ne: 3 } },
+          { state }
+        ]
+      };
     }
   }
 
@@ -191,7 +197,7 @@ exports.getArticleList = (req, res) => {
         meta: 1,
         create_time: 1,
       };
-      if(article){
+      if (article) {
         fields = {
           title: 1,
           create_time: 1,
@@ -243,7 +249,7 @@ exports.getArticleList = (req, res) => {
             result.forEach((e) => {
               let year = e.create_time.getFullYear()
               // let month = e.create_time.getMonth()
-              if(!obj[year]){
+              if (!obj[year]) {
                 obj[year] = []
                 obj[year].push(e)
               } else {
@@ -456,7 +462,6 @@ exports.getArticleDetail = (req, res) => {
   let { id } = req.body;
   let type = Number(req.body.type) || 1; //文章类型 => 1: 普通文章，2: 简历，3: 管理员介绍
   let filter = Number(req.body.filter) || 1; //文章的评论过滤 => 1: 过滤，2: 不过滤
-  // console.log('type:', type);
   if (type === 1) {
     if (!id) {
       responseClient(res, 200, 1, '文章不存在 ！');

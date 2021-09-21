@@ -29,7 +29,7 @@ const articleSchema = new mongoose.Schema({
 	numbers: { type: String, default: 0 },
 
 	// 封面图
-	img_url: { type: String, default: 'https://upload-images.jianshu.io/upload_images/12890819-80fa7517ab3f2783.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240' },
+	img_url: { type: String, default: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20170821%2F6896d9c2d37a4528b403fc188dbaf3b4.jpeg&refer=http%3A%2F%2F5b0988e595225.cdn.sohucs.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1634797075&t=eecccf1215b9fbf12d04897eadbbfb94' },
 
 	// 文章类型 => 1: 普通文章，2: 简历，3: 管理员介绍
 	type: { type: Number, default: 1 },
