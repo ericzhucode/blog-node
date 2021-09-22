@@ -133,6 +133,7 @@ exports.getArticleList = (req, res) => {
   let keyword = req.query.keyword || null;
   let state = req.query.state || '';
   let likes = req.query.likes || '';
+  let type = req.query.type || '';
   let tag_id = req.query.tag_id || '';
   let category_id = req.query.category_id || '';
   let article = req.query.article || '';
@@ -143,14 +144,8 @@ exports.getArticleList = (req, res) => {
     pageSize = 1000;
   }
   let conditions = {};
-  if (!state) {
-    if (keyword) {
-      const reg = new RegExp(keyword, 'i'); //不区分大小写
-      conditions = {
-        $or: [{ title: { $regex: reg } }, { desc: { $regex: reg } }],
-      };
-    }
-  } else if (state) {
+  // state为0表示未发布，为1表示发布的
+  if (state) {
     state = parseInt(state);
     if (keyword) {
       const reg = new RegExp(keyword, 'i');
@@ -167,12 +162,27 @@ exports.getArticleList = (req, res) => {
         ],
       };
     } else {
+      if (type) {
+        conditions = {
+          $and: [
+            { type },
+            { state }
+          ]
+        };
+      } else {
+        conditions = {
+          $and: [
+            { type: { $ne: 3 } },
+            { state }
+          ]
+        };
+      }
+    }
+  } else {
+    if (keyword) {
+      const reg = new RegExp(keyword, 'i'); //不区分大小写
       conditions = {
-        // 管理员介绍文章并不需要出现在前台显示的列表上
-        $and: [
-          { type: { $ne: 3 } },
-          { state }
-        ]
+        $or: [{ title: { $regex: reg } }, { desc: { $regex: reg } }],
       };
     }
   }
